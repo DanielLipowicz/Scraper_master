@@ -26,7 +26,7 @@ class PublicationPage:
         publication.article_title = self.article_title.text
         for i in range(try_to_count_elements(self.article_author_elements)):
             publication.authors.append(try_to_read(self.article_author_elements[i]))
-            publication.affiliations.append(try_to_read(self.article_author_affiliations[i]))
+            publication.affiliations.append(try_to_read(i))
         publication.publication_source = try_to_read(self.publication_source)
         publication.year = try_to_read(self.article_year)
         for i in range(try_to_count_elements(self.article_keywords)):
@@ -39,6 +39,11 @@ class PublicationPage:
 
         return publication
 
+    def try_to_read_affiliations(self, affiliations_index):
+        try:
+            return self.article_author_affiliations[affiliations_index]
+        except:
+            return "undefined"
 
 def try_to_read(element):
     try:
@@ -52,4 +57,5 @@ def try_to_count_elements(elements):
         return len(elements)
     except:
         return 0
+
 
