@@ -3,6 +3,7 @@ from src.PageObjects import searching_results_page
 
 class MainSearchPage:
     def __init__(self, browser):
+        self.browser = browser
         self.driver = browser.driver
         self.input_element_search_by_title = self.driver.find_element_by_id("EQUALS_names")
         self.input_element_search_by_author = self.driver.find_element_by_id("EQUALS_author")

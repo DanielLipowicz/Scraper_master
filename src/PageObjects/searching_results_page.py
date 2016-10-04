@@ -7,7 +7,6 @@ class SearchingResultsPage:
         self.driver = self.browser.driver
         self.results = None
         self.number_of_results_pages = None
-        self.number_of_results_pages = None
         self.button_next_pages = None
         self.number_of_current_page = None
         self.get_refresh_page_object()

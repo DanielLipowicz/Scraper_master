@@ -63,7 +63,7 @@ def save_to_file(scraped, file_name="scraped"):
 
 #  sample data scraping
 def scrap_page(Browser, keyword):
-    Browser.get_sarching_page()
+    Browser.get_bazEkon_page()
     page = main_search_page.MainSearchPage(Browser)
     page = page.search_by_keyword(keyword)
     scraped = []

@@ -8,7 +8,7 @@ keywords = ["Big Data", "Hurtownie danych"]
 # to configure MongoDB database go to src/databases/mongodbConfig.py
 # without that application could not work
 # ------------------------------------------
-# scraping_data_operations.scrap_data(keywords)
+scraping_data_operations.scrap_data(keywords)
 
 # data processing and visualisation
 # should to define another keywords set which may to compare

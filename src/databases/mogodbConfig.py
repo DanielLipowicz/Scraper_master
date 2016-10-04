@@ -5,7 +5,7 @@ client = pymongo.MongoClient('92.222.68.207', 27017)
 
 
 class mongoConnection:
-    def __init__(self, database='test', collection='scrap3'):
+    def __init__(self, database='test', collection='masterTest'):
         self.db = client[database]
         self.collection = self.db[collection]
         self.connection_test()
