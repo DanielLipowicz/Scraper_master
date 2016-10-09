@@ -22,7 +22,7 @@ class PublicationPage:
         self.browser.reset_waiting_time()
 
     def create_publication(self):
-        publication = Publication.Publciation()
+        publication = Publication.Publication()
         publication.article_title = self.article_title.text
         for i in range(try_to_count_elements(self.article_author_elements)):
             publication.authors.append(try_to_read(self.article_author_elements[i]))
@@ -44,6 +44,7 @@ class PublicationPage:
             return self.article_author_affiliations[affiliations_index]
         except:
             return "undefined"
+
 
 def try_to_read(element):
     try:

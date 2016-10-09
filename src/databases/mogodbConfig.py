@@ -5,7 +5,7 @@ client = pymongo.MongoClient('92.222.68.207', 27017)
 
 
 class mongoConnection:
-    def __init__(self, database='test', collection='masterTest'):
+    def __init__(self, database='test', collection='masterTest2'):  # masterTest - already exist
         self.db = client[database]
         self.collection = self.db[collection]
         self.connection_test()
@@ -16,7 +16,7 @@ class mongoConnection:
             client.server_info()
             print(client.database_names())
         except pymongo.errors.ServerSelectionTimeoutError:
-            print(err)
+            print("Timeout error")
 
     def insert_one_object(self, objectJSON):
         post_id = self.collection.insert_one(objectJSON).inserted_id
