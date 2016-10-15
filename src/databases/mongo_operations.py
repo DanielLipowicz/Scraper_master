@@ -3,6 +3,10 @@ from src.data_visualisation import pyplot_usage
 from src.DataOperation import select_operations
 
 
+def get_new_connection_to_database(database='test', collection='masterTest2'):
+    return mogodbConfig.mongoConnection(database, collection)
+
+
 def select_distinct_key_words(collection):
     list = []
     for i in collection.distinct("key_words"):

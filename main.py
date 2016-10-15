@@ -2,8 +2,11 @@ from src.DataOperation import scraping_data_operations
 from src.DataOperation import key_words_data_procesing as data_processing
 
 
-keywords = ["Analiza danych", "Statystyka", "Systemy business Intelligence", "Analiza danych", "technologia","Przetwarzanie danych", "informacja w internecie", "internet", "chmura obliczeniowa","data mining"]
+keywords = ["internet",
+            "chmura obliczeniowa", "data mining"]
 # ------------------------------------------
+#"Analiza danych", "Statystyka", "Systemy business Intelligence", "Analiza danych",
+#      "technologia","Przetwarzanie danych","informacja w internecie",
 # scraping update data to MongoDb database
 # to configure MongoDB database go to src/databases/mongodbConfig.py
 # without that application could not work
