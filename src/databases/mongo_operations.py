@@ -2,8 +2,8 @@ from src.databases import mogodbConfig
 from src.data_visualisation import pyplot_usage
 from src.DataOperation import select_operations
 
-
-def get_new_connection_to_database(database='test', collection='masterTest2'):
+# OTHER COLLECTION DEFINER
+def get_new_connection_to_database(database='test', collection='masterTest3'):
     return mogodbConfig.mongoConnection(database, collection)
 
 

@@ -1,5 +1,7 @@
 import functools
 
+import numpy
+
 from src.databases import mongo_operations
 from matplotlib import pyplot
 
@@ -66,47 +68,45 @@ def clasify_bibliography(result, coll=1):
 
 def clasify_year(result, coll=2):
     for i in result:
-        if 0 <= i[coll] <= 1980:
-            i[coll] = 'to 1980'
-        if 1981 <= i[coll] <= 1990:
-            i[coll] = 'from 1981 to 1990'
-        if 1991 <= i[coll] <= 2000:
-            i[coll] = 'from 1991 to 2000'
-        if 2001 <= i[coll] <= 2005:
-            i[coll] = 'from 2001 to 2005'
-        if 2006 <= i[coll] <= 2010:
-            i[coll] = 'from 2006 to 2010'
-        if 2011 <= i[coll] <= 2015:
-            i[coll] = 'from 2011 to 2015'
-        if 2016 <= i[coll]:
-            i[coll] = 'from 2016'
-    for i in result:
-        print(i)
+        val = i[coll][-4:].replace(")", "")
+
+        if type(int(val)) == type(str()):
+            print(i[coll])
+        elif 0 <= int(val) <= 1980:
+            i[coll] = '0'
+        elif 1981 <= int(val) <= 1990:
+            i[coll] = '1'
+        elif 1991 <= int(val) <= 2000:
+            i[coll] = '2'
+        elif 2001 <= int(val) <= 2005:
+            i[coll] = '3'
+        elif 2006 <= int(val) <= 2010:
+            i[coll] = '4'
+        elif 2011 <= int(val) <= 2015:
+            i[coll] = '5'
+        elif 2016 <= int(val):
+            i[coll] = '6'
     return result
 
-def draw_density_plot(list_of_list_to_count, element_no=0):
-    key_words_list = []
+
+def count_density_array(list_of_list_to_count, element_no=0):
+    # return density_plot_list
+    # table: y-density
+    #       x-label
+    density_plot_list = []
     for i in list_of_list_to_count:
-        key_words_list.append(i[element_no])
-    x_dic = set(key_words_list)
+        density_plot_list.append(i[element_no])
+    x_dic = set(density_plot_list)
     x = []
     y = []
     for i in x_dic:
-        y.append(key_words_list.count(i))
+        y.append(density_plot_list.count(i))
     for i in range(len(y)):
         x.append(i)
     print("y parameter: ", y)
     print("x parameter: ", x)
-    pyplot.plot(x, y)
-    return key_words_list.sort()
-
-
-result = []
-result = prepare_data()
-clasify_keywords(result)
-# draw_density_plot(result)
-clasify_bibliography(result)
-draw_density_plot(result, 1)
+    resultArray = [x, y]
+    return resultArray
 
 
 def get_one_column_form_list(nested_list=[], column=0):
@@ -150,3 +150,77 @@ def calculate_probability_all_results(result):
             probability[i] = calculated_column.count(i) / len(calculated_column)
         probability_list.append(probability)
     return probability_list
+
+
+def create_numpy_array(data_array, *take_columns):
+    created_array = []
+    for i in data_array:
+        row = []
+        for j in take_columns:
+            row.append(i[j])
+            print(row)
+        created_array.append(row)
+    print(created_array)
+    return numpy.array(created_array)
+
+
+result = []
+result = prepare_data()
+clasify_keywords(result)
+# draw_density_plot(result)
+key_words_hist = count_density_array(result,0)
+pyplot.bar(key_words_hist[0],key_words_hist[1],1)
+
+bibliography_hist = count_density_array(result,1)
+pyplot.bar(bibliography_hist[0],bibliography_hist[1],1)
+
+year_hist = count_density_array(result,2)
+pyplot.bar(year_hist[0],year_hist[1],1)
+
+clasify_bibliography(result)
+clasify_year(result)
+count_density_array(result, 1)
+true_affiliation = filter_result(result, 3, 1)
+false_affiliation = filter_result(result, 3, 0)
+
+true_affiliation_density_key_words = count_density_array(true_affiliation, 0)
+true_affiliation_density_bibliography = count_density_array(true_affiliation, 1)
+true_affiliation_density_year = count_density_array(true_affiliation, 2)
+
+false_affiliation_density_key_words = count_density_array(false_affiliation, 0)
+false_affiliation_density_bibliography = count_density_array(false_affiliation, 1)
+false_affiliation_density_year = count_density_array(false_affiliation, 2)
+
+table_result = {"key_words": {}, "bibliography": {}, "year": {}, "affiliation": {}}
+
+for i in true_affiliation_density_key_words[0]:
+    table_result["key_words"][i] = {}
+    table_result["key_words"][i]['true_affiliation'] = true_affiliation_density_key_words[1][i]
+    table_result["key_words"][i]['false_affiliation'] = false_affiliation_density_key_words[1][i]
+    table_result["key_words"][i]['probability_true_affiliation'] = table_result["key_words"][i]['true_affiliation'] / \
+                                                                   (table_result["key_words"][i]['true_affiliation'] +
+                                                                    table_result["key_words"][i]['false_affiliation'])
+    table_result["key_words"][i]['probability_false_affiliation'] = table_result["key_words"][i]['false_affiliation'] / \
+                                                                    (table_result["key_words"][i]['true_affiliation'] +
+                                                                     table_result["key_words"][i]['false_affiliation'])
+for i in true_affiliation_density_bibliography[0]:
+    table_result["bibliography"][i] = {}
+    table_result['bibliography'][i]['true_affiliation'] = true_affiliation_density_bibliography[1][i]
+    table_result['bibliography'][i]['false_affiliation'] = false_affiliation_density_bibliography[1][i]
+    table_result["bibliography"][i]['probability_true_affiliation'] = table_result["bibliography"][i]['true_affiliation'] / \
+                                                                   (table_result["bibliography"][i]['true_affiliation'] +
+                                                                    table_result["bibliography"][i]['false_affiliation'])
+    table_result["bibliography"][i]['probability_false_affiliation'] = table_result["bibliography"][i]['false_affiliation'] / \
+                                                                    (table_result["bibliography"][i]['true_affiliation'] +
+                                                                     table_result["bibliography"][i]['false_affiliation'])
+
+for i in true_affiliation_density_year[0]:
+    table_result["year"][i] = {}
+    table_result['year'][i]['true_affiliation'] = true_affiliation_density_year[1][i]
+    table_result['year'][i]['false_affiliation'] = false_affiliation_density_year[1][i]
+    table_result["year"][i]['probability_true_affiliation'] = table_result["year"][i]['true_affiliation'] / \
+                                                                   (table_result["year"][i]['true_affiliation'] +
+                                                                    table_result["year"][i]['false_affiliation'])
+    table_result["year"][i]['probability_false_affiliation'] = table_result["year"][i]['false_affiliation'] / \
+                                                                    (table_result["year"][i]['true_affiliation'] +
+                                                                     table_result["year"][i]['false_affiliation'])
