@@ -14,7 +14,7 @@ def prepare_data():
 
     def get_data_from_found_record(record):
         key_words_related = len(record.get("key_words"))
-        print(key_words_related)
+        # print(key_words_related)
         affiliations = record.get("affiliations")
         bibliography_count = len(record.get("bibliography"))
         year = record.get("year")
@@ -22,7 +22,7 @@ def prepare_data():
         for affiliation in affiliations:
             if affiliation != 'undefined':
                 is_university = 1
-                print(affiliation)
+                # print(affiliation)
 
         # table KW, BIBLIO, ROK, UCZELNIA
         result.append([key_words_related, bibliography_count, year, is_university])
@@ -44,8 +44,8 @@ def clasify_keywords(result):
             i[0] = 3
         if 6 < i[0]:
             i[0] = 4
-    # for i in result:
-    #     print(i)
+            # for i in result:
+            #     print(i)
 
 
 def clasify_bibliography(result, coll=1):
@@ -62,16 +62,16 @@ def clasify_bibliography(result, coll=1):
             i[coll] = 5
         if 26 <= i[coll]:
             i[coll] = 6
-    # for i in result:
-        # print(i)
+            # for i in result:
+            # print(i)
 
 
 def clasify_year(result, coll=2):
     for i in result:
-        colvar = i[coll].replace(")", "",10)
-        colvar = colvar.replace("(", "",10)
-        colvar = colvar.replace("'", "",10)
-        if len(colvar)<=4:
+        colvar = i[coll].replace(")", "", 10)
+        colvar = colvar.replace("(", "", 10)
+        colvar = colvar.replace("'", "", 10)
+        if len(colvar) <= 4:
             val = colvar[-4:]
         else:
             Exception()
@@ -91,7 +91,7 @@ def clasify_year(result, coll=2):
             i[coll] = 5
         elif 2016 <= int(val):
             i[coll] = 6
-    print("year clasyfi result",result)
+    print("year clasyfi result", result)
     return result
 
 
@@ -176,19 +176,20 @@ clasify_keywords(result)
 clasify_bibliography(result)
 clasify_year(result)
 # draw_density_plot(result)
-key_words_hist = count_density_array(result,0)
-pyplot.bar(key_words_hist[0],key_words_hist[1],1)
+key_words_hist = count_density_array(result, 0)
+# pyplot.bar(key_words_hist[0], key_words_hist[1], 1)
 
-bibliography_hist = count_density_array(result,1)
-pyplot.bar(bibliography_hist[0],bibliography_hist[1],1)
+bibliography_hist = count_density_array(result, 1)
+# pyplot.bar(bibliography_hist[0], bibliography_hist[1], 1)
 
-year_hist = count_density_array(result,2)
-pyplot.bar(year_hist[0],year_hist[1],1)
-
+year_hist = count_density_array(result, 2)
+# pyplot.bar(year_hist[0], year_hist[1], 1)
 
 count_density_array(result, 1)
 true_affiliation = filter_result(result, 3, 1)
 false_affiliation = filter_result(result, 3, 0)
+true_affiliation_number = len(true_affiliation)
+false_affiliation_number = len(false_affiliation)
 
 true_affiliation_density_key_words = count_density_array(true_affiliation, 0)
 true_affiliation_density_bibliography = count_density_array(true_affiliation, 1)
@@ -202,54 +203,106 @@ table_result = {"key_words": {}, "bibliography": {}, "year": {}, "affiliation": 
 
 for class_name in true_affiliation_density_key_words[0]:
     table_result["key_words"][class_name] = {}
-    table_result["key_words"][class_name]['true_affiliation'] = true_affiliation_density_key_words[1][class_name]
-    table_result["key_words"][class_name]['false_affiliation'] = false_affiliation_density_key_words[1][class_name]
-    table_result["key_words"][class_name]['probability_true_affiliation'] = table_result["key_words"][class_name]['true_affiliation'] / \
-                                                                   (table_result["key_words"][class_name]['true_affiliation'] +
-                                                                    table_result["key_words"][class_name]['false_affiliation'])
-    table_result["key_words"][class_name]['probability_false_affiliation'] = table_result["key_words"][class_name]['false_affiliation'] / \
-                                                                    (table_result["key_words"][class_name]['true_affiliation'] +
-                                                                     table_result["key_words"][class_name]['false_affiliation'])
+    table_result["key_words"][class_name]['true_affiliation_density'] = true_affiliation_density_key_words[1][
+        class_name]
+    table_result["key_words"][class_name]['false_affiliation_density'] = false_affiliation_density_key_words[1][
+        class_name]
+
 for class_name in true_affiliation_density_bibliography[0]:
     table_result["bibliography"][class_name] = {}
-    table_result['bibliography'][class_name]['true_affiliation'] = true_affiliation_density_bibliography[1][class_name]
-    table_result['bibliography'][class_name]['false_affiliation'] = false_affiliation_density_bibliography[1][class_name]
-    table_result["bibliography"][class_name]['probability_true_affiliation'] = table_result["bibliography"][class_name]['true_affiliation'] / \
-                                                                   (table_result["bibliography"][class_name]['true_affiliation'] +
-                                                                    table_result["bibliography"][class_name]['false_affiliation'])
-    table_result["bibliography"][class_name]['probability_false_affiliation'] = table_result["bibliography"][class_name]['false_affiliation'] / \
-                                                                    (table_result["bibliography"][class_name]['true_affiliation'] +
-                                                                     table_result["bibliography"][class_name]['false_affiliation'])
+    table_result['bibliography'][class_name]['true_affiliation_density'] = true_affiliation_density_bibliography[1][
+        class_name]
+    table_result['bibliography'][class_name]['false_affiliation_density'] = false_affiliation_density_bibliography[1][
+        class_name]
 
 for class_name in true_affiliation_density_year[0]:
     table_result["year"][class_name] = {}
-    table_result['year'][class_name]['true_affiliation'] = true_affiliation_density_year[1][class_name]
-    table_result['year'][class_name]['false_affiliation'] = false_affiliation_density_year[1][class_name]
-    table_result["year"][class_name]['probability_true_affiliation'] = table_result["year"][class_name]['true_affiliation'] / \
-                                                                   (table_result["year"][class_name]['true_affiliation'] +
-                                                                    table_result["year"][class_name]['false_affiliation'])
-    table_result["year"][class_name]['probability_false_affiliation'] = table_result["year"][class_name]['false_affiliation'] / \
-                                                                    (table_result["year"][class_name]['true_affiliation'] +
-                                                                     table_result["year"][class_name]['false_affiliation'])
+    table_result['year'][class_name]['true_affiliation_density'] = int(true_affiliation_density_year[1][class_name])
+    table_result['year'][class_name]['false_affiliation_density'] = int(false_affiliation_density_year[1][class_name])
+
 # table_result['NB']={}
 # table_result['Posteriori']={}
-all_result_len=len(result)
+all_result_len = len(result)
+table_result['affiliation']["P(T)"] = len(true_affiliation) / all_result_len
+table_result['affiliation']["P(F)"] = len(false_affiliation) / all_result_len
 for category in table_result:
-    for class_name in table_result[category]:
-        table_result[category][class_name]["probability_occurence"]=\
-            (table_result[category][class_name]['true_affiliation']+table_result[category][class_name]['false_affiliation'])/all_result_len
+    if category=='affiliation':
+        pass
+    else:
+        for class_name in table_result[category]:
+            print(class_name,category)
+            print(table_result[category][class_name])
+            table_result[category][class_name]['probability_true_affiliation'] = table_result[category][class_name]['true_affiliation_density'] / \
+                                                                                 (table_result[category][class_name][
+                                                                                      'true_affiliation_density'] +
+                                                                                  table_result[category][class_name][
+                                                                                      'false_affiliation_density'])
+            table_result[category][class_name]['probability_false_affiliation'] = table_result[category][class_name][
+                                                                                      'false_affiliation_density'] / \
+                                                                                  (table_result[category][class_name][
+                                                                                       'true_affiliation_density'] +
+                                                                                   table_result[category][class_name][
+                                                                                       'false_affiliation_density'])
 
-for category in table_result:
-    print(category)
-    for class_name in table_result[category]:
-        print(class_name)
-        table_result[category][class_name]['twierdzenieBayesa']= (table_result[category][class_name]['probability_true_affiliation']*0.6399)/\
-                                                                 table_result[category][class_name]['probability_occurence']
-        print(table_result[category][class_name]['twierdzenieBayesa'])
-        print(table_result[category][class_name]['probability_true_affiliation'])
-        print(table_result[category][class_name]['probability_occurence'])
-#
+            table_result[category][class_name]["P(" + str(class_name) + ")"] = (table_result[category][class_name][
+                                                                                    'true_affiliation_density'] \
+                                                                                + table_result[category][class_name][
+                                                                                    'false_affiliation_density']) \
+                                                                               / all_result_len
+            table_result[category][class_name]["P(" + str(class_name) + "|T)"] = \
+                table_result[category][class_name]['true_affiliation_density'] / true_affiliation_number
+            table_result[category][class_name]["P(" + str(class_name) + "|F)"] = \
+                table_result[category][class_name]['false_affiliation_density'] / false_affiliation_number
+
+# for category in table_result:
+#     print(category)
+#     for class_name in table_result[category]:
+#         print(class_name)
+#         table_result[category][class_name]['twierdzenieBayesa'] = (table_result[category][class_name][
+#                                                                        'probability_true_affiliation'] * 0.6399) / \
+#                                                                   table_result[category][class_name][
+#                                                                       'probability_occurence']
+#         print(table_result[category][class_name]['twierdzenieBayesa'])
+#         print(table_result[category][class_name]['probability_true_affiliation'])
+#         print(table_result[category][class_name]['probability_occurence'])
+# #
 # for class_name in table_result['year']:
 #     print(table_result['year'][class_name])
 #     print("clas name: ", class_name)
-#     print(table_result['year'][class_name]['probability_occurence'])
+#     print(table_result['year'][class_name])
+# def present_all_data_from_table(table_result):
+#   for category in table_result:
+#         print("Kategoria: %s" % category)
+#         if class_name == 'affiliation':
+#             pass
+#         else:
+#             for class_name in table_result[category]:
+#                 print(table_result[category][class_name])
+#                 print("Nazwa klasy: %s" % class_name)
+#                 print("P(" + str(class_name) + "):", table_result[category][class_name]["P(" + str(class_name) + ")"])
+#                 print("P(" + str(class_name) + "|T):", table_result[category][class_name]["P(" + str(class_name) + "|T)"])
+#                 print("P(" + str(class_name) + "|F):", table_result[category][class_name]["P(" + str(class_name) + "|F)"])
+# table_result['year'][class_name]
+# posteriori
+for category in table_result:
+    print("Kategoria: %s" % category)
+    for class_name in table_result[category]:
+        if category == 'affiliation':
+            pass
+        else:
+            table_result[category][class_name]["P(T|" + str(class_name) + ")"] = \
+                (table_result[category][class_name]["P(" + str(class_name) + "|T)"] * table_result['affiliation'][
+                    "P(T)"]) \
+                / table_result[category][class_name]["P(" + str(class_name) + ")"]
+            print("P(T|" + str(class_name) + "): ",table_result[category][class_name]["P(T|" + str(class_name) + ")"])
+
+#
+words=[]
+bib=[]
+year=[]
+aff=[]
+for i in result:
+    words.append(i[0])
+    bib.append(i[1])
+    year.append(i[2])
+    aff.append(i[3])

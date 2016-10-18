@@ -1,7 +1,8 @@
 from src.DataOperation import scraping_data_operations
 from src.DataOperation import key_words_data_procesing as data_processing
 
-keywords = ["Analiza danych", "Statystyka"]
+keywords = ["Analiza danych", "Statystyka","Przetwarzanie danych",
+#             "chmura obliczeniowa", "data mining", "Systemy business Intelligence","Analiza danych"]
 # ------------------------------------------
 # "Analiza danych", "Statystyka", "Systemy business Intelligence", "Analiza danych",
 #      "technologia","Przetwarzanie danych","informacja w internecie",
