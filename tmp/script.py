@@ -175,15 +175,35 @@ result = prepare_data()
 clasify_keywords(result)
 clasify_bibliography(result)
 clasify_year(result)
-# draw_density_plot(result)
+# draw_density_plot(result),
+
+# column = get_one_column_form_list(result, 1)
+# column.sort()
+# column = count_density(column)
+# width = 1
+# ind = numpy.arange(len(column[1]))
+# pyplot.bar(ind, column[1], 1)
+# pyplot.xticks(ind + width/2., column[0])
+#
+def generate_pyplot_bar(x,y, len=None):
+    if len==None:
+        len=len(x)
+    width = 1
+    ind = numpy.arange(len)
+    pyplot.bar(ind, y, 1)
+    pyplot.xticks(ind + width/2., x)
+
 key_words_hist = count_density_array(result, 0)
 # pyplot.bar(key_words_hist[0], key_words_hist[1], 1)
+# generate_pyplot_bar(key_words_hist[0],key_words_hist[1])
 
 bibliography_hist = count_density_array(result, 1)
 # pyplot.bar(bibliography_hist[0], bibliography_hist[1], 1)
+# generate_pyplot_bar(bibliography_hist[0],bibliography_hist[1])
 
 year_hist = count_density_array(result, 2)
 # pyplot.bar(year_hist[0], year_hist[1], 1)
+# generate_pyplot_bar(year_hist[0],year_hist[1])
 
 count_density_array(result, 1)
 true_affiliation = filter_result(result, 3, 1)
