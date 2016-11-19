@@ -33,6 +33,25 @@ def prepare_data():
     #     print(i)
     return result
 
+# result=secound_prepare_date()
+def secound_prepare_date():
+    result = []
+    for result_row in collection.find():
+        for affiliation_dict in result_row['affiliations']:
+            if affiliation_dict!='undefined':
+                result.append(result_row)
+
+
+    return result
+def print_distinct(result):
+    lista=[]
+    for i in result:
+        for j in i["affiliations"]:
+            lista.append(j)
+    dist_list = set(lista)
+    dist_list = sorted(dist_list)
+    for i in dist_list:
+        print(i)
 
 def clasify_keywords(result):
     for i in result:
@@ -326,3 +345,5 @@ for i in result:
     bib.append(i[1])
     year.append(i[2])
     aff.append(i[3])
+
+result=prepare_data()

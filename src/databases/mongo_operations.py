@@ -3,7 +3,7 @@ from src.data_visualisation import pyplot_usage
 from src.DataOperation import select_operations
 
 # OTHER COLLECTION DEFINER
-def get_new_connection_to_database(database='test', collection='masterTest3'):
+def get_new_connection_to_database(database='test', collection='masterTest4'): #mongodbConfig
     return mogodbConfig.mongoConnection(database, collection)
 
 
