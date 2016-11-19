@@ -1,7 +1,7 @@
 import pymongo
 
 client = pymongo.MongoClient()
-client = pymongo.MongoClient('92.222.68.207', 27017)
+client = pymongo.MongoClient('localhost', 27017)
 
 
 class mongoConnection:
